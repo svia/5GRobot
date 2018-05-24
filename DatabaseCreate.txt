@@ -1,0 +1,102 @@
+Step 1: Setting Up the Database
+
+We'll be using MySQL as the back end. So log into MySQL from the command line, or if you prefer a GUI like MySQL work bench, you can use that too. First, create a database called BucketList. From the command line: 
+1
+	
+mysql -u <username> -p
+
+Enter the required password and when logged in, execute the following command to create the database:
+1
+	
+CREATE DATABASE BucketList;
+
+Once the database has been created, create  a table called tbl_user as shown:
+1
+2
+3
+4
+5
+6
+	
+CREATE TABLE `BucketList`.`tbl_user` (
+  `user_id` BIGINT NULL AUTO_INCREMENT,
+  `user_name` VARCHAR(45) NULL,
+  `user_username` VARCHAR(45) NULL,
+  `user_password` VARCHAR(45) NULL,
+  PRIMARY KEY (`user_id`));
+
+We'll be using Stored procedures for our Python application to interact with the MySQL database. So, once the table tbl_user has been created, create a stored procedure called sp_createUser to sign up a user.
+
+When creating a stored procedure to create a user in the tbl_user table, first we need to check if a user with the same username already exists. If it exists we need to throw an error to the user, otherwise we'll create the user in the user table. Here is how the stored procedure sp_createUser would look:
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+	
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_createUser`(
+    IN p_name VARCHAR(20),
+    IN p_username VARCHAR(20),
+    IN p_password VARCHAR(20)
+)
+BEGIN
+    if ( select exists (select 1 from tbl_user where user_username = p_username) ) THEN
+     
+        select 'Username Exists !!';
+     
+    ELSE
+     
+        insert into tbl_user
+        (
+            user_name,
+            user_username,
+            user_password
+        )
+        values
+        (
+            p_name,
+            p_username,
+            p_password
+        );
+     
+    END IF;
+END$$
+DELIMITER ;
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    robotId = db.Column(db.String(255))
+    ipAddress = db.Column(db.String(255))
+    command = db.Column(db.String(255))
+    speed = db.Column(db.String(255))
+    angle = db.Column(db.String(255))
+    trackStatus = db.Column(db.String(255))
+    detectStatus = db.Column(db.String(255))
+time = db.Column(db.String(255))
