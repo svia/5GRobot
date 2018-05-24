@@ -8,26 +8,26 @@ mysql = MySQL()
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'm2m'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'm2m'
-app.config['MYSQL_DATABASE_DB'] = '5GRobotDB'
+app.config['MYSQL_DATABASE_DB'] = '5GRobot'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
-conn=mysql.connect()
-cursor= conn.cursor()
+
 
 
 @app.route("/")
 def index():
 	conn=mysql.connect()
 	cursor= conn.cursor()
-	cursor.execute ("SELECT* FROM 5GRobotDB WHERE robotId='robot1'")
+	cursor.execute ("SELECT* FROM RobotStatus WHERE robotId='robot1'")
 	robot1=cursor.fetchall()
-	cursor.execute ("SELECT* FROM 5GRobotDB WHERE robotId='robot2'")
+	cursor.execute ("SELECT* FROM RobotStatus WHERE robotId='robot2'")
 	robot2=cursor.fetchall()
-	cursor.execute ("SELECT* FROM 5GRobotDB WHERE robotId='robot3'")
+	cursor.execute ("SELECT* FROM RobotStatus WHERE robotId='robot3'")
 	robot3=cursor.fetchall()
 	cursor.close() 
 	conn.close()
+	
 	return render_template('index.html',robot1=robot1,robot2= robot2,robot3= robot3)
 	
 	 
@@ -36,7 +36,7 @@ def index():
 def detail(robot_Id):
 	conn=mysql.connect()
 	cursor= conn.cursor()
-	cursor.execute ('SELECT * FROM 5GRobotDB WHERE robotId="{}"'. format(robot_Id))
+	cursor.execute ('SELECT * FROM 5GRobot WHERE robotId="{}"'. format(robot_Id))
 	robot=cursor.fetchall()
 	cursor.close() 
 	conn.close()
@@ -50,8 +50,7 @@ def add():
         data = request.get_json()   # data is a dictionary
         conn=mysql.connect()
 		cursor= conn.cursor()
-		cursor.execute ('UPDATE 5GRobotDB SET WHERE robotId="{}"'. format())
-		UPDATE cowstatus SET GpsAcqPeriod={}, AccelPattern={}	WHERE Device_ID = "{}" '.format(gps_acq_period,accel_pattern,device)
+		cursor.execute ('UPDATE 5GRobotDB SET WHERE robotId="{}"'. format(data))
 		cursor.close() 
 		conn.close()
         return 'ADD'
